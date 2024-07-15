@@ -34,17 +34,17 @@ services:
         networks:
             - bothelp-test-task
 
-#    supervisor:
-#        build:       docker/supervisor
-#        depends_on:
-#            - rabbitmq
-#        volumes:
-#            - ./:/data/bothelp-test-task.local
-#            - ./docker/supervisor/supervisord.conf:/etc/supervisor/supervisord.conf
-#        working_dir: /data/bothelp-test-task.local
-#        command: [ "supervisord", "-c", "/etc/supervisor/supervisord.conf" ]
-#        networks:
-#            - bothelp-test-task
+    supervisor:
+        build:       docker/supervisor
+        depends_on:
+            - rabbitmq
+        volumes:
+            - ./:/data/bothelp-test-task.local
+            - ./docker/supervisor/supervisord.conf:/etc/supervisor/supervisord.conf
+        working_dir: /data/bothelp-test-task.local
+        command: [ "supervisord", "-c", "/etc/supervisor/supervisord.conf" ]
+        networks:
+            - bothelp-test-task
 
 networks:
     bothelp-test-task:
