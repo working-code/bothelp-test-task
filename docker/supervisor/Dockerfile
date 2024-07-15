@@ -11,6 +11,7 @@ RUN apk update \
         git \
         linux-headers \
         libzip-dev \
+        supervisor \
      && pecl install \
         xdebug \
     && docker-php-ext-enable \
@@ -20,4 +21,4 @@ RUN docker-php-ext-install -j$(nproc) \
         sockets \
         pcntl
 
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN mkdir /var/log/supervisor
