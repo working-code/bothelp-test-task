@@ -1,0 +1,51 @@
+version: '3'
+
+services:
+    application:
+        build:
+            context: ./docker/php-fpm
+        image:       working-code/php-fpm
+        environment:
+            - PHP_IDE_CONFIG=serverName=bothelp-test-task
+        volumes:
+            - ./:/data/bothelp-test-task.local
+            - ./docker/php-fpm/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+        working_dir: /data/bothelp-test-task.local
+        networks:
+            - bothelp-test-task
+
+    rabbitmq:
+        build:
+            context: ./docker/rabbitmq
+        image:  working-code/rabbitmq
+        working_dir: /data/bothelp-test-task.local
+        hostname:    rabbit-mq
+        ports:
+            - 15672:15672
+            - 5672:5672
+        healthcheck:
+            test: [ "CMD", "curl", "-f", "http://rabbitmq:15672" ]
+            interval: 30s
+            timeout:  10s
+            retries:  5
+        environment:
+            RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+            RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+        networks:
+            - bothelp-test-task
+
+#    supervisor:
+#        build:       docker/supervisor
+#        depends_on:
+#            - rabbitmq
+#        volumes:
+#            - ./:/data/bothelp-test-task.local
+#            - ./docker/supervisor/supervisord.conf:/etc/supervisor/supervisord.conf
+#        working_dir: /data/bothelp-test-task.local
+#        command: [ "supervisord", "-c", "/etc/supervisor/supervisord.conf" ]
+#        networks:
+#            - bothelp-test-task
+
+networks:
+    bothelp-test-task:
+        driver: bridge
