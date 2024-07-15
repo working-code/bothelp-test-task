@@ -10,9 +10,14 @@ RUN apk update \
         icu-dev \
         git \
         linux-headers \
+        libzip-dev \
      && pecl install \
         xdebug \
     && docker-php-ext-enable \
         xdebug
+
+RUN docker-php-ext-install -j$(nproc) \
+        sockets \
+        pcntl
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
