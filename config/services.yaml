@@ -20,5 +20,13 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    App\Service\AsyncService:
+        calls:
+            - [
+                'addProducer',
+                [ !php/const App\Service\AsyncService::GROUP_EVENT, '@old_sound_rabbit_mq.group_event_producer' ]
+            ]
+            - [
+                'addProducer',
+                [ !php/const App\Service\AsyncService::ACCOUNT_EVENT, '@old_sound_rabbit_mq.account_event_producer' ]
+            ]
